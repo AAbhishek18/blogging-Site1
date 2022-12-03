@@ -13,17 +13,15 @@ router.post("/createAuthor", authorsController.createAuthor)
 
 router.post("/login", blogController.loginAuthor)
 
-router.post("/createBlog", middleware.authEntication, blogController.createBlog)
+router.post("/createBlog", middleware.authorIsation, blogController.createBlog)
 
-router.get("/blogs", middleware.authEntication, blogController.getBlog)
+router.get("/blogs",  blogController.getBlog)
 
-router.put("/blogs/:blogId", middleware.authEntication, middleware.authorIsation, blogController.updateBlogs)
+router.put("/blogs/:blogId",  middleware.authorIsation, blogController.updateBlogs)
 
-router.delete("/blogs", middleware.authEntication, middleware.authorIsation, blogController.deleteBlogsByFields)
+router.delete("/blogs",  middleware.authorIsation, blogController.deleteBlogsByFields)
 
-router.delete("/blogs/:blogId", middleware.authEntication, middleware.authorIsation, blogController.deleteBlogs)
-
-
+router.delete("/blogs/:blogId",  middleware.authorIsation, blogController.deleteBlogs)
 
 
 module.exports = router;
