@@ -1,4 +1,4 @@
-
+const jwt = require("jsonwebtoken");
 const AuthorModel = require("../models/authorModel")
 //regex for email
 function validateEmail(usermail) {
@@ -38,6 +38,43 @@ const createAuthor = async function (req, res) {
     res.status(500).send({ status: false, msg: error.message })
 }
 }
-module.exports.createAuthor = createAuthor
+
+// lOGIN Author API
+const loginAuthor = async function (req, res) {
+    try {
+      let email = req.body.email;
+      let password = req.body.password;
+      if (!email)
+        return res.status(400).send({ status: false, msg: "plz enter email" });
+      if (!password)
+        return res.status(400).send({ status: false, msg: "plz enter password" });
+      let valid = await AuthorModel.findOne({ email: email, password: password });
+      if (!valid) {
+        return res
+          .status(404)
+          .send({ status: false, msg: "email or password is wrong" });
+      }
+  
+      // if email and password is valid then generate token
+      let token = jwt.sign(
+        {
+          authorId: valid._id.toString(),
+          iat: $numericDate = Math.floor(Date.now() / 1000),
+          
+        },
+        "abhishekKumar",
+        { expiresIn:"1200s" }
+      );
+      res.setHeader("x-api-key", token);
+      res.status(200).send({ status: true, msg: "author login sucsessful", data: token });
+    } catch (error) {
+      res.status(500).send({ status: false, msg: error.message });
+    }
+  };
+
+
+
+
+module.exports = {createAuthor,loginAuthor}
 
 

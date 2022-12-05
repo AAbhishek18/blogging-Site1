@@ -27,7 +27,7 @@ const authorIsation = async function (req, res, next) {
         next()
     }
     catch (error) {
-        return res.status(404).send({ status: false, msg: error.message })
+        return res.status(500).send({ status: false, msg: "Your token is expired login again" })
     }
 }
 module.exports={authorIsation}

@@ -11,7 +11,7 @@ const middleware = require("../middlewares/auth")
 
 router.post("/createAuthor", authorsController.createAuthor)
 
-router.post("/login", blogController.loginAuthor)
+router.post("/login", authorsController.loginAuthor)
 
 router.post("/createBlog", middleware.authorIsation, blogController.createBlog)
 

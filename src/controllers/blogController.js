@@ -1,4 +1,4 @@
-const jwt = require("jsonwebtoken");
+
 const authorModel = require("../models/authorModel");
 const blogModel = require("../models/blogModel");
 
@@ -117,7 +117,15 @@ const updateBlogs = async function (req, res) {
 const deleteBlogs = async function (req, res) {
   try {
     let id = req.params.blogId;
-    let allBlogs = await blogModel.findOneAndUpdate(
+       
+    let blog=await blogModel.find({_id:id,isDeleted:false})
+    if(blog.length==0){
+      return res.status(404).send({status:false,msg:"Blog not exist"})
+    }
+
+
+
+       let allBlogs = await blogModel.findOneAndUpdate(
       { _id: id, isDeleted: false },
       { $set: { isDeleted: true, deletedAt: time } },
       { new: true, upsert: true }
@@ -190,37 +198,8 @@ const getBlog = async function (req, res) {
 };
 
 
-// lOGIN Author API
-const loginAuthor = async function (req, res) {
-  try {
-    let email = req.body.email;
-    let password = req.body.password;
-    if (!email)
-      return res.status(400).send({ status: false, msg: "plz enter email" });
-    if (!password)
-      return res.status(400).send({ status: false, msg: "plz enter password" });
-    let valid = await authorModel.findOne({ email: email, password: password });
-    if (!valid) {
-      return res
-        .status(404)
-        .send({ status: false, msg: "email or password is wrong" });
-    }
 
-    // if email and password is valid then generate token
-    let token = jwt.sign(
-      {
-        authorId: valid._id.toString(),
-        iat: Math.floor(Date.now() / 1000) - 30,
-      },
-      "abhishekKumar"
-    );
-    res.setHeader("x-api-key", token);
-    res.status(200).send({ status: true, msg: "author login sucsessful", data: token });
-  } catch (error) {
-    res.status(400).send({ status: false, msg: error.message });
-  }
-};
-module.exports ={loginAuthor,
+module.exports ={
                    createBlog,
                    updateBlogs,
                    deleteBlogs,
