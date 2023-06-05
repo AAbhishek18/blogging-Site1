@@ -1,4 +1,4 @@
-# Project-1-Blogging Site
+# Project-Blogging Site
 
 
 ## Blogging Site-Project Requirement
